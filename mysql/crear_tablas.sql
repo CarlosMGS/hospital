@@ -38,9 +38,7 @@ CREATE TABLE PACIENTES(
 	apellidos varchar(32),
 	dni varchar(9),
 	company varchar(32),
-	tlf varchar(15),
-	primary key(dni),
-	foreign key(id)
+	tlf varchar(15)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE PACIENTES
@@ -49,28 +47,6 @@ ALTER TABLE PACIENTES
 ALTER TABLE PACIENTES
 	ADD CONSTRAINT pacientes_ibfk_1 FOREIGN KEY (id) REFERENCES USERS (id) ON DELETE CASCADE;
 
-
-
-
-/*
-
-TABLA HISTORIALES para almacenar toda la información referente a los historiales de los pacientes de la aplicación
-
-*/
-
-
-CREATE TABLE HISTORIALES(
-	id Integer,
-	fecha date,
-	id_medico Integer
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-ALTER TABLE HISTORIALES
-	ADD PRIMARY KEY (id, fecha, id_medico);
-	
-ALTER TABLE HISTORIALES	 
-	ADD CONSTRAINT historiales_ibfk_1 FOREIGN KEY (id) REFERENCES USERS (id),
-	ADD CONSTRAINT historiales_ibfk_2 FOREIGN KEY (id_medico) REFERENCES MEDICOS (id);
 
 
 /*
@@ -91,6 +67,30 @@ ALTER TABLE MEDICOS
 	
 ALTER TABLE MEDICOS
 	ADD CONSTRAINT medicos_ibfk_1 FOREIGN KEY (id) REFERENCES USERS (id) ON DELETE CASCADE;
+
+
+/*
+
+TABLA HISTORIALES para almacenar toda la información referente a los historiales de los pacientes de la aplicación
+
+*/
+
+
+CREATE TABLE HISTORIALES(
+	id Integer,
+	fecha date,
+	id_medico Integer
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE HISTORIALES
+	ADD PRIMARY KEY (id, fecha, id_medico);
+	
+ALTER TABLE HISTORIALES	 
+	ADD CONSTRAINT historiales_ibfk_1 FOREIGN KEY (id) REFERENCES PACIENTES (id),
+	ADD CONSTRAINT historiales_ibfk_2 FOREIGN KEY (id_medico) REFERENCES MEDICOS (id);
+
+
+
 	
 
 
