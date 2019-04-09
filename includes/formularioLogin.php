@@ -19,17 +19,14 @@ class formularioLogin extends Form{
      * @return string HTML asociado a los campos del formulario.
      */
     protected function generaCamposFormulario($datosIniciales){
-
-        $html = '<fieldset>';
-        $html .= '<legend>Usuario y contraseña</legend>';
-        $html .= '<div class="grupo-control">';                            
+		
+        $html = '<div class="grupo-control">';                            
         $html .= '<label>Nombre de usuario:</label> <input type="text" name="nombreUsuario" />';
         $html .= '</div>';
         $html .= '<div class="grupo-control">';
-        $html .= '<label>Password:</label> <input type="password" name="password" />';
+        $html .= '<label>Contraseña:</label> <input type="password" name="password" />';
         $html .= '</div>';
         $html .= '<div class="grupo-control"><button type="submit" name="login">Entrar</button></div>';
-        $html .= '</fieldset>';
 
         return $html;
     }
@@ -38,9 +35,9 @@ class formularioLogin extends Form{
 
         $erroresFormulario = array();
 
-        $nombreUsuario = isset($datos['nombreUsuario']) ? $datos['nombreUsuario'] : null;
+        $username = isset($datos['nombreUsuario']) ? $datos['nombreUsuario'] : null;
 
-        if ( empty($nombreUsuario) ) {
+        if ( empty($username) ) {
             $erroresFormulario[] = "El nombre de usuario no puede estar vacío";
         }
 
@@ -51,15 +48,17 @@ class formularioLogin extends Form{
 
         if (count($erroresFormulario) === 0) {
             //$app esta incluido en config.php
-            $usuario = Usuario::buscaUsuario($nombreUsuario);
 
+
+            $usuario = Usuario::buscaUsuario($username);
+			
             if (!$usuario) {
                 $erroresFormulario[] = "El usuario o el password no coinciden";
             }
             else{
-                if ( $usuario->compruebaPassword($password) ) {
+                if ($usuario->compruebaPassword($password)) {
                     $_SESSION['login'] = true;
-                    $_SESSION['nombre'] = $nombreUsuario;
+                    $_SESSION['nombre'] = $username;
                     $_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;
                     //header('Location: index.php');
                     return "index.php";

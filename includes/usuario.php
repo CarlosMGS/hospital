@@ -5,29 +5,53 @@ require_once('aplicacion.php');
 class Usuario {
 
     private $id;
-    private $nombreUsuario;
-    private $nombre;
+    private $name;
+    private $last;
+    private $email;
+    private $dni;
+    private $company;
+    private $tlf;
     private $password;
-    private $rol;
+    
 
 
-    private function __construct($nombreUsuario, $nombre, $password, $rol){
-        $this->nombreUsuario= $nombreUsuario;
-        $this->nombre = $nombre;
+    private function __construct($name, $last, $email, $dni, $company, $tlf, $password){
+        $this->name= $name;
+        $this->email = $email;
         $this->password = $password;
-        $this->rol = $rol;
+        $this->last = $last;
+        $this->dni = $dni;
+        $this->company = $company;
+        $this->tlf= $tlf;
+        
     }
 
     public function id(){ 
         return $this->id; 
     }
 
-    public function rol(){ 
-        return $this->rol;
-     }
+    public function name(){
+        return $this->name;
+    }
 
-    public function nombreUsuario(){
-        return $this->nombreUsuario;
+    public function email(){
+        return $this->email;
+    }
+
+    public function dni(){
+        return $this->dni;
+    }
+
+    public function company(){
+        return $this->company;
+    }
+
+    public function tlf(){
+        return $this->tlf;
+    }
+
+    public function last(){
+        return $this->last;
     }
 
     public function cambiaPassword($nuevoPassword){
@@ -35,18 +59,19 @@ class Usuario {
     }
 
 
-    /* Devuelve un objeto Usuario con la información del usuario $nombreUsuario,
+    /* Devuelve un objeto Usuario con la información del usuario $name,
      o false si no lo encuentra*/
-    public static function buscaUsuario($nombreUsuario){
+    public static function buscaUsuario($email){
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
-        $query = sprintf("SELECT * FROM Usuarios U WHERE U.nombreUsuario = '%s'", $conn->real_escape_string($nombreUsuario));
+
+        $query = sprintf("SELECT * FROM pacientes U WHERE U.correo = '%s'", $conn->real_escape_string($name));
         $rs = $conn->query($query);
         $result = false;
         if ($rs) {
             if ( $rs->num_rows == 1) {
                 $fila = $rs->fetch_assoc();
-                $user = new Usuario($fila['nombreUsuario'], $fila['nombre'], $fila['password'], $fila['rol']);
+                $user = new Usuario($fila['nombre'], $fila['apellidos'],$fila['correo'], $fila['dni'], $fila['company'], $fila['tlf'], $fila['password']);
                 $user->id = $fila['id'];
                 $result = $user;
             }
@@ -65,8 +90,8 @@ class Usuario {
 
     /* Devuelve un objeto Usuario si el usuario existe y coincide su contraseña. En caso contrario,
      devuelve false.*/
-    public static function login($nombreUsuario, $password){
-        $user = self::buscaUsuario($nombreUsuario);
+    public static function login($name, $password){
+        $user = self::buscaUsuario($name);
         if ($user && $user->compruebaPassword($password)) {
             return $user;
         }
@@ -74,12 +99,12 @@ class Usuario {
     }
     
     /* Crea un nuevo usuario con los datos introducidos por parámetro. */
-    public static function crea($nombreUsuario, $nombre, $password, $rol){
-        $user = self::buscaUsuario($nombreUsuario);
+    public static function crea($name, $last, $email, $dni, $company, $tlf, $password){
+        $user = self::buscaUsuario($email);
         if ($user) {
             return false;
         }
-        $user = new Usuario($nombreUsuario, $nombre, password_hash($password, PASSWORD_DEFAULT), $rol);
+        $user = new Usuario($name, $last, $email, $dni, $company, $tlf,password_hash($password, PASSWORD_DEFAULT));
         return self::guarda($user);
     }
     
@@ -94,11 +119,14 @@ class Usuario {
     private static function inserta($usuario){
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
-        $query=sprintf("INSERT INTO Usuarios(nombreUsuario, nombre, password, rol) VALUES('%s', '%s', '%s', '%s')"
-            , $conn->real_escape_string($usuario->nombreUsuario)
-            , $conn->real_escape_string($usuario->nombre)
-            , $conn->real_escape_string($usuario->password)
-            , $conn->real_escape_string($usuario->rol));
+        $query=sprintf("INSERT INTO pacientes(nombre, apellidos, correo, dni, company, tlf, password) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s')"
+            , $conn->real_escape_string($usuario->name)
+            , $conn->real_escape_string($usuario->last)
+            , $conn->real_escape_string($usuario->email)
+            , $conn->real_escape_string($usuario->dni)
+            , $conn->real_escape_string($usuario->company)
+            , $conn->real_escape_string($usuario->tlf)
+            , $conn->real_escape_string($usuario->password));
 
         if ( $conn->query($query) ){
             $usuario->id = $conn->insert_id;
@@ -112,9 +140,9 @@ class Usuario {
     private static function actualiza($usuario){
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
-        $query=sprintf("UPDATE Usuarios U SET nombreUsuario = '%s', nombre='%s', password='%s', rol='%s' WHERE U.id=%i"
-            , $conn->real_escape_string($usuario->nombreUsuario)
-            , $conn->real_escape_string($usuario->nombre)
+        $query=sprintf("UPDATE users U SET name = '%s', email='%s', password='%s', rol='%s' WHERE U.id=%i"
+            , $conn->real_escape_string($usuario->name)
+            , $conn->real_escape_string($usuario->email)
             , $conn->real_escape_string($usuario->password)
             , $conn->real_escape_string($usuario->rol)
             , $usuario->id);
@@ -129,6 +157,36 @@ class Usuario {
         }
         
         return $usuario;
+    }
+
+    public static function memes($name){
+        $usuario = self::buscaUsuario($name);
+        $app = Aplicacion::getInstance();
+        $conn = $app->conexionBD();
+        $query=sprintf("SELECT * FROM memes WHERE id_autor= '%s'", $conn->real_escape_string($usuario->id()));
+        $rs = $conn->query($query);
+        $rt=false;
+      
+        if ($rs){
+            if($rs->num_rows>0){
+                /*array de memes*/
+                $rt=array();
+                $i = 0;
+                while($row = mysqli_fetch_assoc($rs)){
+                    /*array de cada meme*/
+                    $rj=array();
+                    $rj[0] = $row['title']; $rj[1] = $row['num_megustas']; $rj[2] = $row['link_img']; 
+                    $rt[$i] = $rj;
+                    $i = $i + 1;
+                }
+            }
+            $rs->free();
+        }
+        else{
+            echo "Error al consultar en la BD: (" . $conn->errno . ") " . utf8_encode($conn->error);
+            exit(); 
+        }
+        return $rt;
     }
     
 }
