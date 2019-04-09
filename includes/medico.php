@@ -2,28 +2,21 @@
 
 require_once('aplicacion.php');
 
-class Usuario {
+class Medico {
 
     private $id;
     private $name;
-    private $last;
     private $email;
-    private $dni;
-    private $company;
-    private $tlf;
+    private $espec;
     private $password;
     
 
 
-    private function __construct($name, $last, $email, $dni, $company, $tlf, $password){
+    private function __construct($name, $email, $espec, $password){
         $this->name= $name;
         $this->email = $email;
         $this->password = $password;
-        $this->last = $last;
-        $this->dni = $dni;
-        $this->company = $company;
-        $this->tlf= $tlf;
-        
+        $this->espec = $espec;        
     }
 
     public function id(){ 
@@ -34,24 +27,12 @@ class Usuario {
         return $this->name;
     }
 
-    public function email(){
+    public function espec(){
+        return $this->espec;
+    }
+	
+	public function email(){
         return $this->email;
-    }
-
-    public function dni(){
-        return $this->dni;
-    }
-
-    public function company(){
-        return $this->company;
-    }
-
-    public function tlf(){
-        return $this->tlf;
-    }
-
-    public function last(){
-        return $this->last;
     }
 
     public function cambiaPassword($nuevoPassword){
@@ -65,13 +46,13 @@ class Usuario {
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
 
-        $query = sprintf("SELECT * FROM pacientes U WHERE U.correo = '%s'", $conn->real_escape_string($email));
+        $query = sprintf("SELECT * FROM medicos U WHERE U.correo = '%s'", $conn->real_escape_string($email));
         $rs = $conn->query($query);
         $result = false;
         if ($rs) {
             if ( $rs->num_rows == 1) {
                 $fila = $rs->fetch_assoc();
-                $user = new Usuario($fila['nombre'], $fila['apellidos'],$fila['correo'], $fila['dni'], $fila['company'], $fila['tlf'], $fila['password']);
+                $user = new Medico($fila['nombre'], $fila['correo'],$fila['especialidad'], $fila['password']);
                 $user->id = $fila['id'];
                 $result = $user;
             }
@@ -99,12 +80,12 @@ class Usuario {
     }
     
     /* Crea un nuevo usuario con los datos introducidos por parámetro. */
-    public static function crea($name, $last, $email, $dni, $company, $tlf, $password){
+    public static function crea($name, $email, $espec, $password){
         $user = self::buscaUsuario($email);
         if ($user) {
             return false;
         }
-        $user = new Usuario($name, $last, $email, $dni, $company, $tlf,password_hash($password, PASSWORD_DEFAULT));
+        $user = new Usuario($name, $email, $espec, password_hash($password, PASSWORD_DEFAULT));
         return self::guarda($user);
     }
     
@@ -119,13 +100,10 @@ class Usuario {
     private static function inserta($usuario){
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
-        $query=sprintf("INSERT INTO pacientes(nombre, apellidos, correo, dni, company, tlf, password) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s')"
+        $query=sprintf("INSERT INTO medicos(nombre, correo, especialidad, password) VALUES('%s', '%s', '%s', '%s')"
             , $conn->real_escape_string($usuario->name)
-            , $conn->real_escape_string($usuario->last)
             , $conn->real_escape_string($usuario->email)
-            , $conn->real_escape_string($usuario->dni)
-            , $conn->real_escape_string($usuario->company)
-            , $conn->real_escape_string($usuario->tlf)
+            , $conn->real_escape_string($usuario->espec)
             , $conn->real_escape_string($usuario->password));
 
         if ( $conn->query($query) ){
@@ -136,5 +114,7 @@ class Usuario {
         }
         return $usuario;
     }
+
+
     
 }

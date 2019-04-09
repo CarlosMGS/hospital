@@ -1,9 +1,9 @@
 <?php
 
 require_once('form.php');
-require_once('usuario.php');
+require_once('medico.php');
 
-class formularioRegistro extends Form{
+class formularioRegistroMedico extends Form{
 
     public function  __construct($formId, $opciones = array() ){
         parent::__construct($formId, $opciones);
@@ -22,11 +22,7 @@ class formularioRegistro extends Form{
         $html = '<fieldset>';
 
         $html .= '<div class="grupo-control">';
-        $html .= '<label>Nombre:</label> <input class="control" type="text" name="name" />';
-        $html .= '</div>';
-
-        $html .= '<div class="grupo-control">';
-        $html .= '<label>Apellidos:</label> <input class="control" type="text" name="last_name" />';
+        $html .= '<label>Nombre y apellidos:</label> <input class="control" type="text" name="name" />';
         $html .= '</div>';
 
         $html .= '<div class="grupo-control">';
@@ -34,15 +30,11 @@ class formularioRegistro extends Form{
         $html .= '</div>';
 
         $html .= '<div class="grupo-control">';
-        $html .= '<label>DNI:</label> <input class="control" type="text" name="dni" />';
+        $html .= '<label>Especialidad:</label> <input class="control" type="text" name="espec" />';
         $html .= '</div>';
 
         $html .= '<div class="grupo-control">';
-        $html .= '<label>Compañía:</label> <input class="control" type="text" name="company" />';
-        $html .= '</div>';
-
-        $html .= '<div class="grupo-control">';
-        $html .= '<label>Teléfono:</label> <input class="control" type="text" name="tlf" />';
+        $html .= '<label>Clave de registro:</label> <input class="control" type="text" name="clave" />';
         $html .= '</div>';
 
         $html .= '<div class="grupo-control">';
@@ -73,30 +65,20 @@ class formularioRegistro extends Form{
         if ( empty($name)) {
             $erroresFormulario[] = "Debe introducir un nombre.";
         }
-
-        $last = isset($_POST['last_name']) ? $_POST['last_name'] : null;
-        if ( empty($last)) {
-            $erroresFormulario[] = "Debe introducir al menos un apellido.";
-        }
         
         $email = isset($_POST['email']) ? $_POST['email'] : null;
         if ( empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL) ) {
             $erroresFormulario[] = "El email no tiene un formato valido.";
         }
 
-        $dni = isset($_POST['dni']) ? $_POST['dni'] : null;
-        if ( empty($dni) || mb_strlen($dni) < 9 ) {
-            $erroresFormulario[] = "Debe introducir un dni válido.";
+        $espec = isset($_POST['espec']) ? $_POST['espec'] : null;
+        if ( empty($espec)) {
+            $erroresFormulario[] = "Debe introducir una especialidad.";
         }
 
-        $company = isset($_POST['company']) ? $_POST['company'] : null;
-        if ( empty($company)) {
-            $erroresFormulario[] = "Debe introducir una compañía.";
-        }
-
-        $tlf = isset($_POST['tlf']) ? $_POST['tlf'] : null;
-        if ( empty($tlf)) {
-            $erroresFormulario[] = "Debe introducir un teléfono.";
+        $clave = isset($_POST['clave']) ? $_POST['clave'] : null;
+        if ( empty($clave) || $clave != "MEDico") {
+            $erroresFormulario[] = "Clave incorrecta.";
         }
 
         $password = isset($_POST['password']) ? $_POST['password'] : null;
@@ -119,7 +101,7 @@ class formularioRegistro extends Form{
         }
         
         if (count($erroresFormulario) === 0) {
-            $usuario = Usuario::crea($name, $last, $email, $dni, $company, $tlf, $password);
+            $usuario = Medico::crea($name, $email, $espec, $password);
             
             if (! $usuario ) {
                 $erroresFormulario[] = "El usuario ya existe";

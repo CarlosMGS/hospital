@@ -80,7 +80,7 @@ TABLA HISTORIALES para almacenar toda la información referente a los historiale
 
 */
 
-
+/*
 CREATE TABLE HISTORIALES(
 	id Integer,
 	fecha date,
@@ -94,7 +94,7 @@ ALTER TABLE HISTORIALES
 	ADD CONSTRAINT historiales_ibfk_1 FOREIGN KEY (id) REFERENCES PACIENTES (id),
 	ADD CONSTRAINT historiales_ibfk_2 FOREIGN KEY (id_medico) REFERENCES MEDICOS (id);
 
-
+*/
 
 	
 

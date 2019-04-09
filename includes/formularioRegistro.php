@@ -66,6 +66,7 @@ class formularioRegistro extends Form{
     }
 
     protected function procesaFormulario($datos){
+		echo salchicha;
 
         $erroresFormulario = array();
 
@@ -141,7 +142,7 @@ class formularioRegistro extends Form{
                 return "index.php";
             }
         }
-
+		echo "salchicha";
         return $erroresFormulario;
 
     }

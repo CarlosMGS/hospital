@@ -1,7 +1,7 @@
 <div class="cabecera">
 
 	<div id="logo">
-		<a href="index.php">Clinica Ygeia</a>
+		<a href="index.php" id="logo">Clinica Ygeia</a>
 	</div>
 	<div id="link">
 		<?php
