@@ -2,6 +2,7 @@
 
 //Inicio del procesamiento
 require_once("includes/config.php");
+require_once("includes/formularioBuscaPaciente.php");
 
 ?>
 
@@ -24,7 +25,7 @@ require_once("includes/config.php");
 			<?php require("includes/comun/sidebarIzq.php");?>
 
 			<div id="contenido">
-                <h1>Registro de médico</h1>
+                <h1>Búsqueda de paciente</h1>
 
                 <?php
                     $formulario = new formularioBuscaPaciente("registro", array('action' => 'crearConsulta.php'));

@@ -2,6 +2,7 @@
 
 	require_once("includes/config.php");
 	require_once("includes/usuario.php");
+	require_once("includes/medico.php");
 
 ?>
 <!DOCTYPE html>
@@ -23,41 +24,32 @@
 				<?php require("includes/comun/sidebarIzq.php"); ?>
 
 				<div id="contenido">						
-					<a href='editarPerfil.php' id='edit'>Editar</a>
 					<div id="panel-perfil">
-						<div id="foto">
-						<?php
-							$imgPerfil = "mysql/img/".$_SESSION["nombre"]."/fotoPerfil.jpg";
-							echo '<img id="img-perfil" src='.$imgPerfil.'>';
-						?>
+						
 	                	</div>
 	                	<div id="perfil">
 							<?php
-								$usuario = Usuario::BuscaUsuario($_SESSION["nombre"]);
+								if(isset($_SESSION["rol"]) && ($_SESSION["rol"]==="usuario")){
+									
+									$usuario = Usuario::BuscaUsuario($_SESSION["nombre"]);
+									echo "<p>Nombre: ".$usuario->name()." ". $usuario->last()."</p>";
+									
+								}else if (isset($_SESSION["rol"]) && ($_SESSION["rol"]==="medico")){
+									
+									$medico = Medico::BuscaUsuario($_SESSION["nombre"]);
+									echo "<p>Nombre: ".$medico->name()."</p>";
+									
+								}else{
+									
+									echo "Error al mostrar usuario";
+									
+								}
 								//echo "Nombre: ".$_SESSION["nombre"];
 
-								echo "<p>Nombre: ".$usuario->username()."</p>";
-								$rango = $usuario->rol();
-								echo "<p>Rango: ".$rango."</p>";
+								
 
 							?>
 						</div>
-					</div>
-					<h3>Memes</h3>
-					<div id="panel-memes">
-						<?php
-							$rtMemes= Usuario::memes($usuario->username());
-							if($rtMemes){
-								foreach ($rtMemes as $key => $value) {
-									echo '<div id="meme">
-									<img id="imagen-meme"src='.$value[2].'>
-									<p>Título: '.$value[0].'</p>
-									<p>'.$value[1].' Me Gusta</p>
-									</div>';
-								}
-							}
-						?>
-					</div>
 				</div>
 
 			</div>

@@ -14,6 +14,9 @@ class Aplicacion{
 
     // Array con los datos necesarios para conectarse a la BBDD
     private $bdConexion;
+	
+	// Conexion con Mongo
+	private $mongoConexion;
 
     //Conexion con la BD
     private $conn;
@@ -67,6 +70,11 @@ class Aplicacion{
         }
 	    
     }
+	
+	//funcion que conecta con la base de datos de Mongo
+	public function conexionMongo(){
+		$mongoConexion = new MongoClient();
+	}
     
     public function shutdown(){
 

@@ -127,6 +127,7 @@ class formularioRegistro extends Form{
             } else {
                 $_SESSION['login'] = true;
                 $_SESSION['nombre'] = $username;
+				$_SESSION['rol'] = "usuario";
                 //header('Location: index.php');
 
                 /*Crea la carpeta correspondiente al usuario en /mysql/img/ (relacionado con
@@ -139,7 +140,7 @@ class formularioRegistro extends Form{
                 }
 
 
-                return "index.php";
+                return "usuarioView.php";
             }
         }
 		echo "salchicha";

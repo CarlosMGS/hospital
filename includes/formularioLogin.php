@@ -62,6 +62,7 @@ class formularioLogin extends Form{
 					if ($medico->compruebaPassword($password)) {
                     $_SESSION['login'] = true;
                     $_SESSION['nombre'] = $email;
+					$_SESSION['rol'] = "medico";
                     //$_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;
                     //header('Location: index.php');
                     return "medicoView.php";
@@ -75,7 +76,8 @@ class formularioLogin extends Form{
                 if ($usuario->compruebaPassword($password)) {
                     $_SESSION['login'] = true;
                     $_SESSION['nombre'] = $email;
-                    $_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;
+                    $_SESSION['rol'] = "usuario";
+					//$_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;
                     //header('Location: index.php');
                     return "usuarioView.php";
                 } else {

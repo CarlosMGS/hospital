@@ -108,6 +108,7 @@ class formularioRegistroMedico extends Form{
             } else {
                 $_SESSION['login'] = true;
                 $_SESSION['nombre'] = $name;
+				$_SESSION['rol'] = "medico";
                 //header('Location: index.php');
 
                 /*Crea la carpeta correspondiente al usuario en /mysql/img/ (relacionado con
@@ -120,7 +121,7 @@ class formularioRegistroMedico extends Form{
                 }
                 
 
-                return "index.php";
+                return "medicoView.php";
             }
         }
 
