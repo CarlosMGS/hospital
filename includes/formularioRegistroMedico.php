@@ -34,7 +34,7 @@ class formularioRegistroMedico extends Form{
         $html .= '</div>';
 
         $html .= '<div class="grupo-control">';
-        $html .= '<label>Clave de registro:</label> <input class="control" type="text" name="clave" />';
+        $html .= '<label>Clave de registro:</label> <input class="control" type="password" name="clave" />';
         $html .= '</div>';
 
         $html .= '<div class="grupo-control">';
@@ -47,7 +47,7 @@ class formularioRegistroMedico extends Form{
         $html .= '<input class="control" type="checkbox" name="accept"/><label>Acepto los términos y condiciones.</label>';
         $html .= '</div>';
 
-        $html .= '<div class="grupo-contol">';
+        $html .= '<div class="grupo-control">';
         $html .= '<input class="control" type="checkbox" name="robot"/><label>No soy un robot.</label>';
         $html .= '</div>';
 
@@ -100,14 +100,14 @@ class formularioRegistroMedico extends Form{
             $erroresFormulario[] = "Debes confirmar que no eres un robot.";
         }
         
-        if (count($erroresFormulario) === 0) {
+        if (count($erroresFormulario) == 0) {
             $usuario = Medico::crea($name, $email, $espec, $password);
             
-            if (! $usuario ) {
+            if (!$usuario ) {
                 $erroresFormulario[] = "El usuario ya existe";
             } else {
                 $_SESSION['login'] = true;
-                $_SESSION['nombre'] = $username;
+                $_SESSION['nombre'] = $name;
                 //header('Location: index.php');
 
                 /*Crea la carpeta correspondiente al usuario en /mysql/img/ (relacionado con
@@ -118,7 +118,7 @@ class formularioRegistroMedico extends Form{
                 if (!file_exists($carpeta)) {
                     mkdir($carpeta, 0777, true);
                 }
-
+                
 
                 return "index.php";
             }

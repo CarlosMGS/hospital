@@ -55,14 +55,14 @@ class formularioLogin extends Form{
 			
             if (!$usuario) {
                 $erroresFormulario[] = "El usuario o el password no coinciden";
-				$medico = Medico::buscaUsuario($email)
+				$medico = Medico::buscaUsuario($email);
 				if(!$medico){
 					$erroresFormulario[] = "El usuario o el password no coinciden";
 				}else{
 					if ($medico->compruebaPassword($password)) {
                     $_SESSION['login'] = true;
                     $_SESSION['nombre'] = $email;
-                    $_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;
+                    //$_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;
                     //header('Location: index.php');
                     return "medicoView.php";
                 } else {

@@ -85,7 +85,7 @@ class Medico {
         if ($user) {
             return false;
         }
-        $user = new Usuario($name, $email, $espec, password_hash($password, PASSWORD_DEFAULT));
+        $user = new Medico($name, $email, $espec, password_hash($password, PASSWORD_DEFAULT));
         return self::guarda($user);
     }
     

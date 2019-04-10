@@ -30,7 +30,7 @@ require_once("includes/formularioRegistro.php");
 					<h1>Registro de usuario</h1>
 
 					<?php
-						$formulario = new formularioRegistro("registro", array('action' => 'registro.php'));
+						$formulario = new formularioRegistro("registro", array('action' => 'registroPaciente.php'));
 						$formulario->gestiona();
 					?>
 				</div>
