@@ -36,7 +36,6 @@ class formularioBuscaPaciente extends Form{
     }
 
     protected function procesaFormulario($datos){
-		echo salchicha;
 
         $erroresFormulario = array();
 

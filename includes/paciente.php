@@ -43,7 +43,7 @@ class Paciente {
 		$cursor = $colec->find( $consulta );
         
 		$result = false;
-        if ($rs) {
+        if ($cursor) {
             if ( $rs->num_rows == 1) {
                 $fila = $rs->fetch_assoc();
                 $user = new Medico($fila['nombre'], $fila['correo'],$fila['especialidad'], $fila['password']);

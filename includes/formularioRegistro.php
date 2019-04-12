@@ -126,8 +126,9 @@ class formularioRegistro extends Form{
                 $erroresFormulario[] = "El usuario ya existe";
             } else {
                 $_SESSION['login'] = true;
-                $_SESSION['nombre'] = $username;
+                $_SESSION['nombre'] = $name;
 				$_SESSION['rol'] = "usuario";
+				$_SESSION['usuario'] = $usuario;
                 //header('Location: index.php');
 
                 /*Crea la carpeta correspondiente al usuario en /mysql/img/ (relacionado con

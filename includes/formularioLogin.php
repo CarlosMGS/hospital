@@ -63,6 +63,7 @@ class formularioLogin extends Form{
                     $_SESSION['login'] = true;
                     $_SESSION['nombre'] = $email;
 					$_SESSION['rol'] = "medico";
+					$_SESSION['medico'] = $medico;
                     //$_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;
                     //header('Location: index.php');
                     return "medicoView.php";
@@ -77,6 +78,7 @@ class formularioLogin extends Form{
                     $_SESSION['login'] = true;
                     $_SESSION['nombre'] = $email;
                     $_SESSION['rol'] = "usuario";
+					$_SESSION['usuario'] = $usuario;
 					//$_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;
                     //header('Location: index.php');
                     return "usuarioView.php";

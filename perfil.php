@@ -32,7 +32,7 @@
 								if(isset($_SESSION["rol"]) && ($_SESSION["rol"]==="usuario")){
 									
 									$usuario = Usuario::BuscaUsuario($_SESSION["nombre"]);
-									echo "<p>Nombre: ".$usuario->name()." ". $usuario->last()."</p>";
+									echo "<p>Nombre: ".$usuario->name()." ".$usuario->last()."</p>";
 									
 								}else if (isset($_SESSION["rol"]) && ($_SESSION["rol"]==="medico")){
 									
