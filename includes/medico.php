@@ -115,6 +115,19 @@ class Medico {
         return $usuario;
     }
 
+    public function citas($id){
+
+        $app = Aplicacion::getInstance();
+        $conn = $app->conexionBD();
+
+        $query = sprintf("SELECT fecha, nombre, especialidad FROM periodo_actual U join medicos V ON U.id_medico=V.id WHERE U.id_usuario = '%s'", $conn->real_escape_string($id));
+
+        $rs = $conn->query($query);
+        $result = false;
+
+        //completar
+
+    }
 
     
 }

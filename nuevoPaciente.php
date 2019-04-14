@@ -2,6 +2,7 @@
 
 //Inicio del procesamiento
 require_once("includes/config.php");
+require_once("includes/formularioNuevoPaciente.php");
 
 ?>
 
@@ -24,17 +25,12 @@ require_once("includes/config.php");
 			<?php require("includes/comun/sidebarIzq.php");?>
 
 			<div id="contenido">
-				<a href="mostrarCitas.php">
-					<b>Citas</b>
-				</a>
-					
-				<a href="nuevoPaciente.php">
-					<b>Nuevo Paciente</b>
-				</a>
+                <h1>Búsqueda de paciente</h1>
 
-				<a href="crearConsulta.php">
-					<b>Buscar Paciente</b>
-				</a>
+                <?php
+                    $formulario = new formularioNuevoPaciente("registro", array('action' => 'nuevoPaciente.php'));
+                    $formulario->gestiona();
+                ?>
 			</div>
 
 		</div>

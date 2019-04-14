@@ -6,16 +6,23 @@ class Paciente {
 
     private $id;
     private $name;
+    private $edad;
     private $dni;
+    private $alergias;
+    private $operaciones;
+    private $enfermedades;
+
 	
     
 
 
-    private function __construct($name, $dni, $espec, $password){
+    private function __construct($name, $dni, $edad, $alergias, $operaciones, $enfermedades){
         $this->name= $name;
         $this->dni = $dni;
-        $this->password = $password;
-        $this->espec = $espec;        
+        $this->operaciones = $operaciones;
+        $this->alergias = $alergias;
+        $this->enfermedades= $enfermedades;    
+        $this->edad = $edad;    
     }
 
     public function id(){ 
@@ -30,13 +37,29 @@ class Paciente {
         return $this->dni;
     }
 
+    public function operaciones(){
+        return $this->operaciones;
+    }
+
+    public function alergias(){
+        return $this->alergias;
+    }
+
+    public function enfermedades(){
+        return $this->enfermedades;
+    }
+
+    public function edad(){
+        return $this->edad;
+    }
+
 
     /* Devuelve un objeto Usuario con la información del usuario $name,
      o false si no lo encuentra*/
     public static function buscaUsuario($dni, $name){
         $app = Aplicacion::getInstance();
         $conn = $app->conexionMongo();
-		
+		print_r($conn);
 		$colec = $conn->hospital->pacientes;
 		
 		$consulta = array( 'dni' => $dni , 'name' => $name);
@@ -46,7 +69,7 @@ class Paciente {
         if ($cursor) {
             if ( $rs->num_rows == 1) {
                 $fila = $rs->fetch_assoc();
-                $user = new Medico($fila['nombre'], $fila['correo'],$fila['especialidad'], $fila['password']);
+                $user = new Paciente($fila['nombre'], $fila['dni'],$fila['alergias'], $fila['operaciones'], $file['enfermedades']);
                 $user->id = $fila['id'];
                 $result = $user;
             }
@@ -58,28 +81,14 @@ class Paciente {
         return $result;
     }
 
-    /*Comprueba si la contraseña introducida coincide con la del Usuario.*/
-    public function compruebaPassword($password){
-        return password_verify($password, $this->password);
-    }
-
-    /* Devuelve un objeto Usuario si el usuario existe y coincide su contraseña. En caso contrario,
-     devuelve false.*/
-    public static function login($dni, $password){
-        $user = self::buscaUsuario($dni);
-        if ($user && $user->compruebaPassword($password)) {
-            return $user;
-        }
-        return false;
-    }
     
     /* Crea un nuevo usuario con los datos introducidos por parámetro. */
-    public static function crea($name, $dni, $espec, $password){
-        $user = self::buscaUsuario($dni);
+    public static function crea($name, $dni, $edad, $alergias, $operaciones, $enfermedades){
+        $user = self::buscaUsuario($dni, $name);
         if ($user) {
             return false;
         }
-        $user = new Medico($name, $dni, $espec, password_hash($password, PASSWORD_DEFAULT));
+        $user = new Paciente($name, $dni, $edad, $alergias, $operaciones, $enfermedades);
         return self::guarda($user);
     }
     
@@ -93,12 +102,15 @@ class Paciente {
     
     private static function inserta($usuario){
         $app = Aplicacion::getInstance();
-        $conn = $app->conexionBD();
-        $query=sprintf("INSERT INTO medicos(nombre, correo, especialidad, password) VALUES('%s', '%s', '%s', '%s')"
-            , $conn->real_escape_string($usuario->name)
-            , $conn->real_escape_string($usuario->dni)
-            , $conn->real_escape_string($usuario->espec)
-            , $conn->real_escape_string($usuario->password));
+        $conn = $app->conexionMongo();
+
+        $colec = $conn->hospital->pacientes;
+
+        $persona = array("nombre" => $usuario->name, "edad" => $usuario->edad, "dni" => $usuario->dni,
+                        "alergias" => $usuario->alergias, "operaciones" => $usuario->operaciones,
+                        "enfermedades" => $usuario->enfermedades);
+        $colección->insert($persona);
+        
 
         if ( $conn->query($query) ){
             $usuario->id = $conn->insert_id;

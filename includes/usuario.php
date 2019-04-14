@@ -136,5 +136,47 @@ class Usuario {
         }
         return $usuario;
     }
+
+    public function citasRecientes($id){
+
+        $app = Aplicacion::getInstance();
+        $conn = $app->conexionBD();
+
+        $query = sprintf("SELECT fecha, nombre, especialidad FROM periodo_actual U join medicos V ON U.id_medico=V.id WHERE U.id_usuario = '%s'", $conn->real_escape_string($id));
+
+        $rs = $conn->query($query);
+        $result = false;
+
+        //completar
+
+    }
+
+    public function citasPorMedico($id_medico){
+        $app = Aplicacion::getInstance();
+        $conn = $app->conexionBD();
+
+        $query = sprintf("SELECT fecha FROM periodo_actual U  WHERE U.id_medico = '%s'", $conn->real_escape_string($id_medico));
+
+        $rs = $conn->query($query);
+        $result = false;
+
+        //completar
+    }
+
+    public function medicosPorEspecialidad($especialidad){
+        $app = Aplicacion::getInstance();
+        $conn = $app->conexionBD();
+
+        $query = sprintf("SELECT id, nombre, especialidad FROM medicos U WHERE U.especialidad = '%s'", $conn->real_escape_string($especialidad));
+
+        $rs = $conn->query($query);
+        $result = false;
+
+        //completar
+    }
+
+    public function concertarCita(){
+
+    }
     
 }

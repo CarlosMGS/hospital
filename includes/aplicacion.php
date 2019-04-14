@@ -73,7 +73,12 @@ class Aplicacion{
 	
 	//funcion que conecta con la base de datos de Mongo
 	public function conexionMongo(){
-		$mongoConexion = new MongoClient();
+        $dbhost = 'localhost';
+        $dbport = '27017';
+        
+        $mongoConexion = new MongoDB\Driver\Manager("mongodb://$dbhost:$dbport");
+
+        return $this->mongoConexion;        
 	}
     
     public function shutdown(){
