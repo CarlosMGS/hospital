@@ -137,23 +137,54 @@ class Usuario {
         return $usuario;
     }
 
-    public function citasRecientes($id){
+    public function historial($id){
 
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
 
-        $query = sprintf("SELECT fecha, nombre, especialidad FROM periodo_actual U join medicos V ON U.id_medico=V.id WHERE U.id_usuario = '%s'", $conn->real_escape_string($id));
+        $query = sprintf("SELECT fecha, nombre, especialidad FROM periodo_actual U join medicos V ON U.id_medico=V.id WHERE U.id_paciente = '%s'", $conn->real_escape_string($id));
 
         $rs = $conn->query($query);
         $result = false;
 
-        //completar
+        if($rs){
+			
+			$html="<table class='egt'>";
+			$html.="<tr>";
+			$html.="<th>Fecha</th>";
+			$html.="<th>Nombre</th>";
+			$html.="<th>Especialidad</th>";
+			$html.="</tr>";
+			
+			
+			while ($row = $rs->fetch_assoc()) {
+				$html.= "<tr>";
+				$html.= "<td>".$row['fecha']. "</td> <td>" . $row['nombre']. "</td> <td>" . $row['especialidad']. "</td>";
+				$html.= "</tr>";
+				
+			}
+			
+			$html.="</table>";
+
+                
+            $rs->free();
+			
+		}else{
+			$html = '<h3>No ha tenido citas aún</h3>';
+		}
+		
+		return $html;
 
     }
 
     public function citasPorMedico($id_medico){
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
+		
+		//bucle para rellenar el array $horas con todas las horas del día indexadas por la hora y valor booleano
+		/*for(){
+			
+		}*/
 
         $query = sprintf("SELECT fecha FROM periodo_actual U  WHERE U.id_medico = '%s'", $conn->real_escape_string($id_medico));
 
@@ -163,7 +194,7 @@ class Usuario {
         //completar
     }
 
-    public function medicosPorEspecialidad($especialidad){
+    public static function medicosPorEspecialidad($especialidad){
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
 
@@ -178,5 +209,34 @@ class Usuario {
     public function concertarCita(){
 
     }
+	
+	public static function especialidades(){
+		
+		$app = Aplicacion::getInstance();
+        $conn = $app->conexionBD();
+
+        $query = sprintf("SELECT DISTINCT especialidad FROM medicos ");
+
+        $rs = $conn->query($query);
+        $result = false;
+		
+		if ($rs) {
+			
+			$i = 0;
+			
+			while ($row = $rs->fetch_assoc()) {
+				$espec[$i] = $row['especialidad'];
+				$i = $i + 1;
+			}
+
+                
+            $rs->free();
+        } else {
+            echo "Error al consultar en la BD: (" . $conn->errno . ") " . utf8_encode($conn->error);
+            exit();
+        }
+		
+		return $espec;
+	}
     
 }

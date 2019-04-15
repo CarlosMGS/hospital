@@ -115,17 +115,46 @@ class Medico {
         return $usuario;
     }
 
-    public function citas($id){
+    public function citas($id, $fecha){
 
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
 
-        $query = sprintf("SELECT fecha, nombre, especialidad FROM periodo_actual U join medicos V ON U.id_medico=V.id WHERE U.id_usuario = '%s'", $conn->real_escape_string($id));
-
+        $query = sprintf("SELECT U.fecha, U.hora, V.nombre, V.apellidos  FROM periodo_actual U join pacientes V ON U.id_paciente=V.id WHERE U.id_medico = '%s' AND U.fecha = '%s' ", $conn->real_escape_string($id), $fecha);
+		//$query = sprintf("SELECT U.fecha, U.hora, V.nombre, V.apellidos  FROM periodo_actual U join pacientes V ON U.id_paciente=V.id WHERE U.id_medico = '%s' ", $conn->real_escape_string($id));
+		
+		
         $rs = $conn->query($query);
         $result = false;
+		
+		if($rs){
+			
+			$html="<table class='egt'>";
+			$html.="<tr>";
+			$html.="<th>Fecha</th>";
+			$html.="<th>Hora</th>";
+			$html.="<th>Nombre</th>";
+			$html.="<th>Apellidos</th>";
+			$html.="</tr>";
+			
+			
+			while ($row = $rs->fetch_assoc()) {
+				$html.= "<tr>";
+				$html.= "<td>".$row['fecha']. "</td> <td>" . $row['hora'] . "</td> <td>" . $row['nombre']. "</td> <td>" . $row['apellidos']. "</td>";
+				$html.= "</tr>";
+				
+			}
+			
+			$html.="</table>";
 
-        //completar
+                
+            $rs->free();
+			
+		}else{
+			$html = '<h3>No hay citas para este día</h3>';
+		}
+		
+		return $html;
 
     }
 

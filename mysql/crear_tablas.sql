@@ -50,6 +50,9 @@ ALTER TABLE PACIENTES
 	ADD CONSTRAINT pacientes_ibfk_1 FOREIGN KEY (id) REFERENCES USERS (id) ON DELETE CASCADE;
 */
 
+ALTER TABLE PACIENTES
+	 MODIFY id Integer NOT NULL AUTO_INCREMENT;
+
 
 /*
 
@@ -69,6 +72,9 @@ CREATE TABLE MEDICOS(
 
 ALTER TABLE MEDICOS
 	ADD PRIMARY KEY (id);
+	
+ALTER TABLE MEDICOS
+	 MODIFY id Integer NOT NULL AUTO_INCREMENT;
 /*	
 ALTER TABLE MEDICOS
 	ADD CONSTRAINT medicos_ibfk_1 FOREIGN KEY (id) REFERENCES USERS (id) ON DELETE CASCADE;
@@ -108,14 +114,15 @@ TABLA PERIODO_ACTUAL para saber las citas disponibles en cada día
 
 
 CREATE TABLE PERIODO_ACTUAL(
-	fecha_hora datetime,
+	fecha date,
+	hora time,
 	id_medico Integer,
 	id_paciente Integer
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 ALTER TABLE PERIODO_ACTUAL
-	ADD PRIMARY KEY (fecha_hora, id_medico);
+	ADD PRIMARY KEY (fecha, id_medico, id_paciente);
 	
 ALTER TABLE PERIODO_ACTUAL	 
 	ADD CONSTRAINT periodo_ibfk_1 FOREIGN KEY (id_medico) REFERENCES MEDICOS (id),

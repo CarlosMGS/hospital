@@ -1,8 +1,8 @@
 <?php
-
-	require_once("includes/config.php");
 	require_once("includes/usuario.php");
 	require_once("includes/medico.php");
+	require_once("includes/config.php");
+	
 
 ?>
 <!DOCTYPE html>
@@ -32,12 +32,15 @@
 								if(isset($_SESSION["rol"]) && ($_SESSION["rol"]==="usuario")){
 									
 									$usuario = Usuario::BuscaUsuario($_SESSION["nombre"]);
-									echo "<p>Nombre: ".$usuario->name()." ".$usuario->last()."</p>";
+									echo "<p>Nombre: ".$usuario->name()." ".$usuario->last()."</p></br>";
+									echo "<p>DNI: ".$usuario->dni()."</p></br>";
+									echo "<p>Compañía: ".$usuario->company()."</p></br>";
 									
 								}else if (isset($_SESSION["rol"]) && ($_SESSION["rol"]==="medico")){
 									
 									$medico = Medico::BuscaUsuario($_SESSION["nombre"]);
-									echo "<p>Nombre: ".$medico->name()."</p>";
+									echo "<p>Nombre: ".$medico->name()."</p></br>";
+									echo "<p>Especialidad: ".$medico->especialidad()."</p>";
 									
 								}else{
 									

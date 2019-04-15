@@ -1,7 +1,9 @@
 <?php
 
 //Inicio del procesamiento
+require_once("includes/medico.php");
 require_once("includes/config.php");
+require_once("includes/formularioMostrarCitas.php");
 
 ?>
 
@@ -24,13 +26,13 @@ require_once("includes/config.php");
 			<?php require("includes/comun/sidebarIzq.php");?>
 
 			<div id="contenido">
-				<a href="historialView.php">
-					<b>Historial de citas</b>
-				</a>
-					
-				<a href="pedirCita.php">
-					<b>Pedir cita</b>
-				</a>
+				<?php
+				$medico=$_SESSION['medico'];
+				$fecha=$_SESSION['fecha'];
+				$id = $medico->id();
+				$html= $medico->citas($id,$fecha);
+				echo $html;
+				?>
 			</div>
 
 		</div>

@@ -1,7 +1,9 @@
 <?php
 
 //Inicio del procesamiento
+require_once("includes/medico.php");
 require_once("includes/config.php");
+require_once("includes/formularioMostrarCitas.php");
 
 ?>
 
@@ -24,7 +26,10 @@ require_once("includes/config.php");
 			<?php require("includes/comun/sidebarIzq.php");?>
 
 			<div id="contenido">
-				
+				<?php
+				$formulario = new formularioMostrarCitas("registro", array('action' => 'mostrarCitas.php'));
+				$formulario->gestiona();
+				?>
 			</div>
 
 		</div>

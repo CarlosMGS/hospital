@@ -1,7 +1,9 @@
 <?php
 
 //Inicio del procesamiento
+require_once("includes/usuario.php");
 require_once("includes/config.php");
+
 
 ?>
 
@@ -24,13 +26,12 @@ require_once("includes/config.php");
 			<?php require("includes/comun/sidebarIzq.php");?>
 
 			<div id="contenido">
-				<a href="historialView.php">
-					<b>Historial de citas</b>
-				</a>
-					
-				<a href="pedirCita.php">
-					<b>Pedir cita</b>
-				</a>
+				<?php
+				$user=$_SESSION['usuario'];
+				$id = $user->id();
+				$html= $user->historial($id);
+				echo $html;
+				?>
 			</div>
 
 		</div>
