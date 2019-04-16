@@ -44,11 +44,9 @@ class formularioBuscaEspecialidad extends Form{
 		
 		$_SESSION['especialidad']=$espec;
 		
-		$formulario = new formularioSeleccionaMedico("registro", array('action' => 'pedirCita.php'));
-		$formulario->gestiona();
         
 
-        return $erroresFormulario;
+        return "seleccionaMedico.php";
     }
 
 }

@@ -23,14 +23,21 @@ class formularioSeleccionaMedico extends Form{
 		
 		$medicos=Usuario::medicosPorEspecialidad($_SESSION['especialidad']);
 		
-		$i = sizeof($espec);
-        $html = "<select name='especialidad'>";
+		$i = sizeof($medicos);
+		
+
+        $html = "<select name='medico'>";
 		$i = $i - 1;
 		while($i >= 0){
-			$html .= "<option value='". $espec[$i]. "'>". $espec[$i] ."</option>";
+			$html .= "<option value='". $medicos[$i][0]. "'>". $medicos[$i][1] ."</option>";
 			$i = $i-1;
 		}
 		$html .= "</select>";
+		
+		$html .= '<div class="grupo-control">';                            
+        $html .= '<label>Introduzca una fecha (Formato YYYY-MM-DD):</label> <input type="text" name="fecha" />';
+        $html .= '</div>';
+		
 		$html .= '<div class="grupo-control"><button type="submit" name="buscar">Buscar</button></div>';
         return $html;
     }
@@ -39,9 +46,18 @@ class formularioSeleccionaMedico extends Form{
 
         $erroresFormulario = array();
 
-        $espec = isset($datos['especialidad']) ? $datos['especialidad'] : null;
+        $medico = isset($datos['medico']) ? $datos['medico'] : null;
 		
+		$fecha = isset($datos['fecha']) ? $datos['fecha'] : null;
+		if ( empty($fecha) ) {
+            $erroresFormulario[] = "La fecha no puede estar vacía.";
+        }
 		
+		if (count($erroresFormulario) === 0) {
+			$_SESSION['id_medico']=$medico;
+			$_SESSION['fecha']=$fecha;
+			return "solicitarCita.php";
+		}
 
         
 

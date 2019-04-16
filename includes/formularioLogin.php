@@ -61,7 +61,7 @@ class formularioLogin extends Form{
 				}else{
 					if ($medico->compruebaPassword($password)) {
                     $_SESSION['login'] = true;
-                    $_SESSION['nombre'] = $email;
+                    $_SESSION['nombre'] = $medico->name();
 					$_SESSION['rol'] = "medico";
 					$_SESSION['medico'] = $medico;
                     //$_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;
@@ -75,8 +75,9 @@ class formularioLogin extends Form{
             }
             else{
                 if ($usuario->compruebaPassword($password)) {
+					
                     $_SESSION['login'] = true;
-                    $_SESSION['nombre'] = $email;
+                    $_SESSION['nombre'] = $usuario->name();
                     $_SESSION['rol'] = "usuario";
 					$_SESSION['usuario'] = $usuario;
 					//$_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;

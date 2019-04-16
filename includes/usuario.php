@@ -137,7 +137,7 @@ class Usuario {
         return $usuario;
     }
 
-    public function historial($id){
+    public static function historial($id){
 
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
@@ -177,37 +177,92 @@ class Usuario {
 
     }
 
-    public function citasPorMedico($id_medico){
+    public static function citasPorMedico($id_medico, $fecha){
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
 		
+		$date = DateTime::createFromFormat('!H:i', '9:00');
+		//echo $date->format('H:i');
+		
 		//bucle para rellenar el array $horas con todas las horas del día indexadas por la hora y valor booleano
-		/*for(){
-			
-		}*/
+		for ($i = 0; $i < 17; $i++) {
+			$horas[$date->format('H:i:s')] = false;
+			$date->modify("+30 minutes");
+		}
+		
+		
 
-        $query = sprintf("SELECT fecha FROM periodo_actual U  WHERE U.id_medico = '%s'", $conn->real_escape_string($id_medico));
+        $query = sprintf("SELECT hora FROM periodo_actual U  WHERE U.id_medico = '%s' AND U.fecha = '%s' ORDER BY hora ASC", 
+				$conn->real_escape_string($id_medico),
+				$conn->real_escape_string($fecha));
 
         $rs = $conn->query($query);
         $result = false;
 
-        //completar
+        if ($rs) {
+			
+			$i = 0;
+			
+			while ($row = $rs->fetch_assoc()) {
+				$horas[$row['hora']] = true;
+			}
+			
+			
+
+                
+            $rs->free();
+        } else {
+            echo "Error al consultar en la BD: (" . $conn->errno . ") " . utf8_encode($conn->error);
+            exit();
+        }
+		
+		return $horas;
     }
 
     public static function medicosPorEspecialidad($especialidad){
         $app = Aplicacion::getInstance();
         $conn = $app->conexionBD();
 
-        $query = sprintf("SELECT id, nombre, especialidad FROM medicos U WHERE U.especialidad = '%s'", $conn->real_escape_string($especialidad));
+        $query = sprintf("SELECT id, nombre FROM medicos U WHERE U.especialidad = '%s'", $conn->real_escape_string($especialidad));
 
         $rs = $conn->query($query);
         $result = false;
 
-        //completar
+        if ($rs) {
+			
+			$i = 0;
+			
+			while ($row = $rs->fetch_assoc()) {
+				$medicos[$i][0] = $row['id'];
+				$medicos[$i][1] = $row['nombre'];
+				$i = $i + 1;
+			}
+
+                
+            $rs->free();
+        } else {
+            echo "Error al consultar en la BD: (" . $conn->errno . ") " . utf8_encode($conn->error);
+            exit();
+        }
+		
+		return $medicos;
     }
 
-    public function concertarCita(){
+    public static function concertarCita($id_usuario, $id_medico, $fecha, $hora){
+		
+		$app = Aplicacion::getInstance();
+        $conn = $app->conexionBD();
+        $query=sprintf("INSERT INTO periodo_actual(fecha, hora, id_medico, id_paciente) VALUES('%s', '%s', '%s', '%s')"
+            , $conn->real_escape_string($fecha)
+            , $conn->real_escape_string($hora)
+            , $conn->real_escape_string($id_medico)
+            , $conn->real_escape_string($id_usuario));
 
+        if ( $conn->query($query) ){
+        } else {
+            echo "Error al insertar en la BD: (" . $conn->errno . ") " . utf8_encode($conn->error);
+            exit();
+        }
     }
 	
 	public static function especialidades(){
