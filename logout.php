@@ -9,6 +9,7 @@ unset($_SESSION["esAdmin"]);
 unset($_SESSION["nombre"]);
 
 
+
 session_destroy();
 ?>
 

@@ -26,10 +26,12 @@ require_once("includes/usuario.php");
 
 			<div id="contenido">
 				<?php
-					$cuerpo = Usuario::historial($_SESSION['usuario']->id);
+					//$cuerpo = Usuario::historial($_SESSION['usuario']->id);
+					$cuerpo = Usuario::historial($_SESSION['id']);
 					$html="<h2>Cita confirmada</h2></br>";
 					$html.="<h3>Se ha añadido a su historial:</h3></br>";
 					$html.= $cuerpo;
+					echo $html;
 				?>
 			</div>
 

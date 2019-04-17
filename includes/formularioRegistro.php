@@ -129,6 +129,7 @@ class formularioRegistro extends Form{
                 $_SESSION['nombre'] = $name;
 				$_SESSION['rol'] = "usuario";
 				$_SESSION['usuario'] = $usuario;
+				$_SESSION['id'] = $usuario->id();
                 //header('Location: index.php');
 
                 /*Crea la carpeta correspondiente al usuario en /mysql/img/ (relacionado con

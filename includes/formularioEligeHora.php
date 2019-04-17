@@ -49,8 +49,8 @@ class formularioEligeHora extends Form{
 		$_SESSION['hora']=$hora;
 		$fecha = $_SESSION['fecha'];
 		$id_medico = $_SESSION['id_medico'];
-		$id_usuario = $_SESSION['usuario']->id();
-		
+		//$id_usuario = $_SESSION['usuario']->id();
+		$id_usuario = $_SESSION['id'];
 		Usuario::concertarCita($id_usuario, $id_medico, $fecha, $hora);
 		
         return "exito.php";

@@ -80,6 +80,7 @@ class formularioLogin extends Form{
                     $_SESSION['nombre'] = $usuario->name();
                     $_SESSION['rol'] = "usuario";
 					$_SESSION['usuario'] = $usuario;
+					$_SESSION['id'] = $usuario->id();
 					//$_SESSION['esAdmin'] = strcmp($fila['rol'], 'admin') == 0 ? true : false;
                     //header('Location: index.php');
                     return "usuarioView.php";
