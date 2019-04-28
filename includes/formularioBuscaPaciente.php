@@ -53,10 +53,15 @@ class formularioBuscaPaciente extends Form{
         if (count($erroresFormulario) === 0) {
             $paciente = Paciente::buscaUsuario($dni, $name);
             
+            //var_dump($paciente);
+            //exit();
+
             if (is_null( $paciente) ) {
                 $erroresFormulario[] = "No se ha encontrado un paciente con esos datos.";
             } else {
-                $_SESSION['paciente'] = $paciente;
+                //$_SESSION['paciente'] = $paciente;
+                echo $paciente->mostrar();
+                exit();
                 //$_SESSION['nombre'] = $username;
                 //header('Location: index.php');
 

@@ -79,10 +79,10 @@ class Aplicacion{
         $dbport = '27017';
         
         //$mongoConexion = new MongoDB\Driver\Manager("mongodb://$dbhost:$dbport");
-        
-        $mongoConexion = new MongoDB\Client("mongodb://localhost:27017");
-
-        return $mongoConexion;        
+        if(!$this->mongoConexion){
+            $this->mongoConexion = new MongoDB\Client("mongodb://localhost:27017");
+        }
+        return $this->mongoConexion;        
 	}
     
     public function shutdown(){

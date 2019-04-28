@@ -24,8 +24,8 @@ require_once("includes/config.php");
 			<?php require("includes/comun/sidebarIzq.php");?>
 
 			<div id="contenido">
-				<h1>Página principal</h1>
-				<p> Aquí está el contenido público, visible para todos los usuarios. </p>
+				<h1>Déjanos cuidarte</h1>
+				<img src="img/ygeia.jpg" width="50%" height="50%">
 			</div>
 
 		</div>

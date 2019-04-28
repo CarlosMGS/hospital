@@ -61,7 +61,7 @@ class Paciente {
         $html.= '<p>Edad: '.$this->edad.'<p></br>';
         $html.= '<p>Alergias: '.$this->alergias.'<p></br>';
         $html.= '<p>Operaciones: '.$this->operaciones.'<p></br>';
-        $html.= '<p>Enfermedades: '.$this->Enfermedades.'<p></br>';
+        $html.= '<p>Enfermedades: '.$this->enfermedades.'<p></br>';
         return $html;
     }
 
@@ -72,22 +72,32 @@ class Paciente {
 		//print_r($conn);
 		$colec = $conn->hospital->pacientes;
 		
-		$consulta = array(['dni' => $dni , 'name' => $name]);
-		$cursor = $colec->find( $consulta );
         
+		$cursor = $colec->find( ['0.dni' => $dni , '0.nombre' => $name]);
+        
+        $datos = $cursor->toArray()[0];
+
+        //var_dump($datos[0]);
+        //exit();
+
+        $datos = $datos[0];
+
 		$result = false;
-        if ($cursor) {
-            foreach ($cursor as $entry) {
-                while(1){}
-                return new Paciente($entry['nombre'], $entry['dni'], $entry['edad'], $entry['alergias'], 
-                                     $entry['operaciones'], $entry['enfermedades']);
+        if ($datos) {
+            
+            
                 
-            }
+                /*return new Paciente($datos['nombre'], $datos['dni'], $datos['edad'], $datos['alergias'], 
+                                     $datos['operaciones'], $datos['enfermedades']);*/
+                return new Paciente($datos->nombre, $datos->dni, $datos->edad, $datos->alergias, 
+                                     $datos->operaciones, $datos->enfermedades);
+            
+            //$result = $cursor;
         } else {
             echo "Error al consultar en la BD: (" . $conn->errno . ") " . utf8_encode($conn->error);
             exit();
         }
-        return $cursor;
+        return $result;
     }
 
     

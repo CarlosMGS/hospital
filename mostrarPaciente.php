@@ -27,8 +27,8 @@ require_once("includes/paciente.php");
 			<div id="contenido">
 				<?php
 					//$cuerpo = Usuario::historial($_SESSION['usuario']->id);
-					//$cuerpo = $_SESSION['paciente']->mostrar();
-                    //echo $cuerpo;
+					//$cuerpo = $_SESSION['paciente'];
+                    //echo $cuerpo->name();
                     var_dump($_SESSION['paciente']);
 				?>
 			</div>
