@@ -31,6 +31,12 @@ require_once("includes/config.php");
 				<a href="pedirCita.php">
 					<b>Pedir cita</b>
 				</a>
+
+				<a href="anularCita.php">
+					<b>Anular cita</b>
+				</a>
+
+
 			</div>
 
 		</div>

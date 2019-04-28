@@ -4,6 +4,8 @@
 /**
  * Clase que mantiene el estado de la aplicacion utilizando el patron Singleton
  */
+
+ require "vendor/autoload.php";
 class Aplicacion{
 
     //Instancia Singleton
@@ -76,9 +78,11 @@ class Aplicacion{
         $dbhost = 'localhost';
         $dbport = '27017';
         
-        $mongoConexion = new MongoDB\Driver\Manager("mongodb://$dbhost:$dbport");
+        //$mongoConexion = new MongoDB\Driver\Manager("mongodb://$dbhost:$dbport");
+        
+        $mongoConexion = new MongoDB\Client("mongodb://localhost:27017");
 
-        return $this->mongoConexion;        
+        return $mongoConexion;        
 	}
     
     public function shutdown(){

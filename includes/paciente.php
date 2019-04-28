@@ -54,35 +54,44 @@ class Paciente {
     }
 
 
-    /* Devuelve un objeto Usuario con la información del usuario $name,
-     o false si no lo encuentra*/
+    public function mostrar(){
+        $html = '<h2>Datos del Paciente</h2></br>';
+        $html.= '<p>Nombre: '.$this->name.'<p></br>';
+        $html.= '<p>DNI: '.$this->dni.'<p></br>';
+        $html.= '<p>Edad: '.$this->edad.'<p></br>';
+        $html.= '<p>Alergias: '.$this->alergias.'<p></br>';
+        $html.= '<p>Operaciones: '.$this->operaciones.'<p></br>';
+        $html.= '<p>Enfermedades: '.$this->Enfermedades.'<p></br>';
+        return $html;
+    }
+
+    
     public static function buscaUsuario($dni, $name){
         $app = Aplicacion::getInstance();
         $conn = $app->conexionMongo();
-		print_r($conn);
+		//print_r($conn);
 		$colec = $conn->hospital->pacientes;
 		
-		$consulta = array( 'dni' => $dni , 'name' => $name);
+		$consulta = array(['dni' => $dni , 'name' => $name]);
 		$cursor = $colec->find( $consulta );
         
 		$result = false;
         if ($cursor) {
-            if ( $rs->num_rows == 1) {
-                $fila = $rs->fetch_assoc();
-                $user = new Paciente($fila['nombre'], $fila['dni'],$fila['alergias'], $fila['operaciones'], $file['enfermedades']);
-                $user->id = $fila['id'];
-                $result = $user;
+            foreach ($cursor as $entry) {
+                while(1){}
+                return new Paciente($entry['nombre'], $entry['dni'], $entry['edad'], $entry['alergias'], 
+                                     $entry['operaciones'], $entry['enfermedades']);
+                
             }
-            $rs->free();
         } else {
             echo "Error al consultar en la BD: (" . $conn->errno . ") " . utf8_encode($conn->error);
             exit();
         }
-        return $result;
+        return $cursor;
     }
 
     
-    /* Crea un nuevo usuario con los datos introducidos por parámetro. */
+    
     public static function crea($name, $dni, $edad, $alergias, $operaciones, $enfermedades){
         $user = self::buscaUsuario($dni, $name);
         if ($user) {
@@ -94,9 +103,7 @@ class Paciente {
     
     
     public static function guarda($usuario){
-        if ($usuario->id !== null) {
-            return self::actualiza($usuario);
-        }
+
         return self::inserta($usuario);
     }
     
@@ -106,19 +113,13 @@ class Paciente {
 
         $colec = $conn->hospital->pacientes;
 
-        $persona = array("nombre" => $usuario->name, "edad" => $usuario->edad, "dni" => $usuario->dni,
+        $persona = array(["nombre" => $usuario->name, "edad" => $usuario->edad, "dni" => $usuario->dni,
                         "alergias" => $usuario->alergias, "operaciones" => $usuario->operaciones,
-                        "enfermedades" => $usuario->enfermedades);
-        $colección->insert($persona);
-        
+                        "enfermedades" => $usuario->enfermedades]);
+        $colec->insertOne($persona);
 
-        if ( $conn->query($query) ){
-            $usuario->id = $conn->insert_id;
-        } else {
-            echo "Error al insertar en la BD: (" . $conn->errno . ") " . utf8_encode($conn->error);
-            exit();
-        }
-        return $usuario;
+        return true;
+        
     }
 
 

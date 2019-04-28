@@ -53,8 +53,8 @@ class formularioBuscaPaciente extends Form{
         if (count($erroresFormulario) === 0) {
             $paciente = Paciente::buscaUsuario($dni, $name);
             
-            if (! $paciente ) {
-                $erroresFormulario[] = "No se ha encontrado un paciente con esas datos.";
+            if (is_null( $paciente) ) {
+                $erroresFormulario[] = "No se ha encontrado un paciente con esos datos.";
             } else {
                 $_SESSION['paciente'] = $paciente;
                 //$_SESSION['nombre'] = $username;
@@ -64,7 +64,7 @@ class formularioBuscaPaciente extends Form{
                 el procesamiento del formularioSubirMeme)*/
 
 
-                return "crearConsulta.php";
+                return "mostrarPaciente.php";
             }
         }
         return $erroresFormulario;

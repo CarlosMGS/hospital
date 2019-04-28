@@ -64,10 +64,14 @@ class formularioNuevoPaciente extends Form{
         if ( empty($dni) || mb_strlen($dni) < 9 ) {
             $erroresFormulario[] = "Debe introducir un dni válido.";
         }
+        $edad = isset($_POST['edad']) ? $_POST['edad'] : null;
+        $alergias = isset($_POST['alergias']) ? $_POST['alergias'] : null;
+        $operaciones = isset($_POST['operaciones']) ? $_POST['operaciones'] : null;
+        $enfermedades = isset($_POST['enfermedades']) ? $_POST['enfermedades'] : null;
 
         
         if (count($erroresFormulario) === 0) {
-            $paciente = Paciente::creaUsuario($dni, $name);
+            $paciente = Paciente::crea($name, $dni, $edad, $alergias, $operaciones, $enfermedades);
             
             if (! $paciente ) {
                 $erroresFormulario[] = "Ya existe un paciente con esos datos.";
@@ -80,7 +84,7 @@ class formularioNuevoPaciente extends Form{
                 el procesamiento del formularioSubirMeme)*/
 
 
-                return "crearConsulta.php";
+                return "medicoView.php";
             }
         }
         return $erroresFormulario;

@@ -292,6 +292,52 @@ class Usuario {
         }
 		
 		return $espec;
-	}
+    }
+    
+    public static function citas($id){
+        $app = Aplicacion::getInstance();
+        $conn = $app->conexionBD();
+
+        $query = sprintf("SELECT fecha, hora, nombre, especialidad FROM periodo_actual U join medicos V ON U.id_medico=V.id WHERE U.id_paciente = '%s'", $conn->real_escape_string($id));
+
+        $rs = $conn->query($query);
+        $result = false;
+		
+		if ($rs) {
+			
+			$i = 0;
+			
+			while ($row = $rs->fetch_assoc()) {
+                $citas[$i][0] = $row['fecha'];
+                $citas[$i][1] = $row['hora'];
+                $citas[$i][2] = $row['fecha'] . ' ' . $row['hora']. ' '. $row['nombre']. ' '. $row['especialidad'];
+				$i = $i + 1;
+			}
+
+                
+            $rs->free();
+        } else {
+            echo "Error al consultar en la BD: (" . $conn->errno . ") " . utf8_encode($conn->error);
+            exit();
+        }
+		
+		return $citas;
+    }
+
+    public static function borraCita($id, $fecha, $hora){
+        $app = Aplicacion::getInstance();
+        $conn = $app->conexionBD();
+        $query=sprintf("DELETE FROM periodo_actual WHERE id_paciente = '%s' AND fecha = '%s' AND hora = '%s'", $conn->real_escape_string($id), $conn->real_escape_string($fecha), $conn->real_escape_string($hora));
+
+        var_dump($hora);
+        var_dump($fecha);
+        var_dump($id);
+
+        if ( $conn->query($query) ){
+        } else {
+            echo "Error al borrar de la BD: (" . $conn->errno . ") " . utf8_encode($conn->error);
+            exit();
+        }
+    }
     
 }
